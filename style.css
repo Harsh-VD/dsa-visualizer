@@ -1,0 +1,6 @@
+body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; display: flex; justify-content: center; }
+.container { text-align: center; margin-top: 50px; width: 80%; }
+#array-container { display: flex; align-items: flex-end; justify-content: center; height: 300px; gap: 4px; margin-bottom: 20px; }
+.bar { width: 20px; background-color: #3498db; transition: 0.1s all ease; }
+button { padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; border-radius: 5px; margin: 5px; }
+button:disabled { background: #bdc3c7; }
