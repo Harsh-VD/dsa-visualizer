@@ -1,6 +1,308 @@
-body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; display: flex; justify-content: center; }
-.container { text-align: center; margin-top: 50px; width: 80%; }
-#array-container { display: flex; align-items: flex-end; justify-content: center; height: 300px; gap: 4px; margin-bottom: 20px; }
-.bar { width: 20px; background-color: #3498db; transition: 0.1s all ease; }
-button { padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; border-radius: 5px; margin: 5px; }
-button:disabled { background: #bdc3c7; }
+/* ================================
+   GLOBAL RESET
+================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+/* ================================
+   THEME VARIABLES (DEFAULT)
+================================ */
+:root {
+  --bg-main: #0f172a;
+  --bg-secondary: #1f2933;
+
+  --bar-start: #60a5fa;
+  --bar-end: #2563eb;
+
+  --active-start: #facc15;   /* comparing */
+  --active-end: #eab308;
+
+  --swap-start: #ef4444;     /* swapping */
+  --swap-end: #b91c1c;
+
+  --pivot-start: #ff7f50;    /* pivot */
+  --pivot-end: #ff4500;
+
+  --sorted-start: #4ade80;   /* sorted */
+  --sorted-end: #16a34a;
+
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+/* ================================
+   THEMES
+================================ */
+
+/* 🌈 NEON */
+body.neon {
+  --bg-main: #0f0c29;
+  --bg-secondary: #302b63;
+
+  --bar-start: #00f5ff;
+  --bar-end: #ff00c8;
+
+  --active-start: #f0f000;
+  --active-end: #f0ff00;
+
+  --swap-start: #ff0099;
+  --swap-end: #ff66ff;
+
+  --pivot-start: #ff8000;
+  --pivot-end: #ffcc00;
+
+  --sorted-start: #00ff7f;
+  --sorted-end: #00cc55;
+}
+
+/* 🌅 SUNSET */
+body.sunset {
+  --bg-main: #2c061f;
+  --bg-secondary: #ff6f3c;
+
+  --bar-start: #ff9a3c;
+  --bar-end: #ff165d;
+
+  --active-start: #ffe066;
+  --active-end: #ffd633;
+
+  --swap-start: #ff3c3c;
+  --swap-end: #cc0000;
+
+  --pivot-start: #ff8c42;
+  --pivot-end: #ff5e3a;
+
+  --sorted-start: #a0ff6f;
+  --sorted-end: #55ff33;
+}
+
+/* 🌊 OCEAN */
+body.ocean {
+  --bg-main: #021024;
+  --bg-secondary: #052659;
+
+  --bar-start: #00c9ff;
+  --bar-end: #92fe9d;
+
+  --active-start: #ffe066;
+  --active-end: #ffea33;
+
+  --swap-start: #ff6b6b;
+  --swap-end: #ff1a1a;
+
+  --pivot-start: #ffa500;
+  --pivot-end: #ffcc00;
+
+  --sorted-start: #00ffa0;
+  --sorted-end: #00cc77;
+}
+
+/* 🌲 FOREST */
+body.forest {
+  --bg-main: #0b3d2e;
+  --bg-secondary: #14532d;
+
+  --bar-start: #22c55e;
+  --bar-end: #4ade80;
+
+  --active-start: #f0f000;
+  --active-end: #f0ff00;
+
+  --swap-start: #ff4444;
+  --swap-end: #cc1111;
+
+  --pivot-start: #ff8000;
+  --pivot-end: #ffcc00;
+
+  --sorted-start: #00ff66;
+  --sorted-end: #00cc44;
+}
+
+/* 🍭 CANDY */
+body.candy {
+  --bg-main: #3b0764;
+  --bg-secondary: #ec4899;
+
+  --bar-start: #f472b6;
+  --bar-end: #a855f7;
+
+  --active-start: #ffeb3b;
+  --active-end: #ffd700;
+
+  --swap-start: #ff1744;
+  --swap-end: #d50000;
+
+  --pivot-start: #ff9100;
+  --pivot-end: #ff6d00;
+
+  --sorted-start: #00ffea;
+  --sorted-end: #00cacc;
+}
+
+/* 🖤 MONOCHROME */
+body.mono {
+  --bg-main: #0a0a0a;
+  --bg-secondary: #222;
+
+  --bar-start: #aaa;
+  --bar-end: #fff;
+
+  --active-start: #ccc;
+  --active-end: #eee;
+
+  --swap-start: #f55;
+  --swap-end: #d11;
+
+  --pivot-start: #ffa500;
+  --pivot-end: #ffcc00;
+
+  --sorted-start: #8f8;
+  --sorted-end: #4f4;
+}
+
+/* ================================
+   BODY
+================================ */
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, var(--bg-secondary), var(--bg-main));
+  color: #ffffff;
+  padding: 20px;
+  transition: background 0.4s ease;
+}
+
+/* ================================
+   HEADER
+================================ */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 2.6rem;
+  margin-bottom: 6px;
+}
+
+header p {
+  opacity: 0.85;
+  font-size: 1rem;
+}
+
+/* ================================
+   CONTROLS (GLASSMORPHISM)
+================================ */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+}
+
+.controls select,
+.controls input,
+.controls button {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.controls label {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.controls button {
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.controls button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* ================================
+   ARRAY CONTAINER
+================================ */
+#array-container {
+  height: 420px;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  padding: 10px;
+  position: relative;
+}
+
+/* ================================
+   BARS
+================================ */
+.bar {
+  flex: 1;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, var(--bar-start), var(--bar-end));
+  transition: height 0.2s ease, background 0.3s ease;
+  position: relative;
+}
+
+/* LABEL ABOVE BAR */
+.bar-label {
+  position: absolute;
+  top: -18px;
+  font-size: 0.7rem;
+  text-align: center;
+  width: 100%;
+  color: #fff;
+}
+
+/* HIGHLIGHTS */
+.bar.active {
+  background: linear-gradient(180deg, var(--active-start), var(--active-end));
+}
+
+.bar.swap {
+  background: linear-gradient(180deg, var(--swap-start), var(--swap-end));
+}
+
+.bar.pivot {
+  background: linear-gradient(180deg, var(--pivot-start), var(--pivot-end));
+}
+
+.bar.sorted {
+  background: linear-gradient(180deg, var(--sorted-start), var(--sorted-end));
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  #array-container {
+    height: 300px;
+  }
+
+  header h1 {
+    font-size: 2rem;
+  }
+
+  .controls {
+    gap: 8px;
+  }
+}
