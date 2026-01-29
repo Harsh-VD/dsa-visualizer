@@ -1,7 +1,7 @@
 # DSA Visualizer Web App
 An interactive tool built with Vanilla JavaScript to visualize how sorting algorithms work in real-time.
 
-###PREVIEW 
+### PREVIEW 
 LINK-https://harsh-vd.github.io/dsa-visualizer/
 ### Key Features:
 - Visualizes Bubble Sort using Async/Await logic.
